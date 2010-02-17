@@ -1,1 +1,2 @@
-nothing here yet
+If you wont to download only plasmoid you should choose MyEpisodes.plasmoid
+This is zip file containing src content ready to install by plasmapkg -i MyEpisodes.plasmoid
