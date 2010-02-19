@@ -6,7 +6,7 @@ Type=Service
 ServiceTypes=Plasma/Applet
 X-Plasma-API=python
 X-Plasma-MainScript=code/main.py
-Icon=applications
+Icon=contents/icons/icon.jpg
 
 X-KDE-PluginInfo-Author=Michal Charmas
 X-KDE-PluginInfo-Email=
