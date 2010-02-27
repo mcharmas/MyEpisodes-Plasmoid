@@ -23,7 +23,6 @@ from PyKDE4.plasma import Plasma
 from PyKDE4 import plasmascript
 from EpisodesList import *
 from Config import *
-from hgext.mq import refresh
 import PyKDE4
 import sip
 
