@@ -23,6 +23,7 @@ from PyKDE4.plasma import Plasma
 from PyKDE4 import plasmascript
 from EpisodesList import *
 from Config import *
+from EpisodeSearchEngine import *
 import PyKDE4
 import sip
 
@@ -44,7 +45,10 @@ class HelloWorldApplet(plasmascript.Applet):
         self.refreshButton = None
         
         self.layout = QGraphicsLinearLayout(Qt.Vertical, self.applet)
-        self.layout.setSizePolicy(QSizePolicy(QSizePolicy.Expanding))        
+        self.layout.setSizePolicy(QSizePolicy(QSizePolicy.Expanding))
+        
+        self.searchEngines = []
+        self.searchEngines.append(EpisodeSearchEngine("Torrent-Damage", "http://www.torrent-damage.net/torrents.php?searchstr={show}+{series}x{episode}"))                
                                            
         self.initList()            
 
@@ -73,7 +77,7 @@ class HelloWorldApplet(plasmascript.Applet):
         #self.layout.addItem(self.icon)
 
         if self.configComplete:
-            self.list = EpisodesList(self.user, self.password, self.applet)
+            self.list = EpisodesList(self.user, self.password, self.searchEngines, self.applet)
             self.refreshButton = Plasma.PushButton(self.applet)
             self.refreshButton.setText("Refresh")
             self.refreshButton.clicked.connect(self.list.refresh)

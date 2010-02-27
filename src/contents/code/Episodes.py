@@ -30,6 +30,8 @@ class Episode:
         self.title = title[1:-1]
         self.date = date[1:-1]
         self.link = link
+        self.series = self.episode.split('x')[0]
+        self.episodeNr = self.episode.split('x')[1]
         
     def str(self):
         return self.show + " " + self.episode + " " + self.title + " " + self.date 
@@ -42,7 +44,7 @@ def getEpisodes(username, password):
     episodes = []
 
     connection = HTTPConnection(host, port)
-    connection.request('GET', '/rss.php?feed=today&uid='+str(username)+'&pwdmd5='+password.hexdigest())
+    connection.request('GET', '/rss.php?feed=all&uid='+str(username)+'&pwdmd5='+password.hexdigest())
     resp = connection.getresponse()
     print resp.status, resp.reason, resp.getheader('Location')
     if resp.status != 200:

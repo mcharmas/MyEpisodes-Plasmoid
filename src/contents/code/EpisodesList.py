@@ -25,11 +25,12 @@ from Episodes import *
 from EpisodeWidget import *
 
 class EpisodesList(Plasma.ScrollWidget):
-    def __init__(self, user, password, parent=None):
+    def __init__(self, user, password, searchEngines, parent=None):
         Plasma.ScrollWidget.__init__(self, parent)
         self.info = 'Getting information from MyEpisodes'
         self.user = user
-        self.password = password        
+        self.password = password
+        self.searchEngines = searchEngines        
         self.setInfo()
         self.refresh()    
     
@@ -52,7 +53,7 @@ class EpisodesList(Plasma.ScrollWidget):
         if not error:
             if len(self.episodes):
                 for e in self.episodes:
-                    ep = EpisodeWidget(e, self.widget)
+                    ep = EpisodeWidget(e, self.searchEngines, self.widget)
                     self.wlayout.addItem(ep)
                     size = size + ep.size().height()
                 self.setWidget(self.widget)

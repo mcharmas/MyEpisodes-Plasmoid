@@ -25,8 +25,9 @@ from PyKDE4 import plasmascript
 
 class EpisodeWidget(Plasma.Frame):
     
-    def __init__(self, episode, parent):
+    def __init__(self, episode, searchEngines, parent):
         Plasma.Frame.__init__(self, parent)
+        self.episode = episode
         self.setFrameShadow(3)       
         self.setLayout(QGraphicsLinearLayout(Qt.Vertical, self))                
         
@@ -51,9 +52,19 @@ class EpisodeWidget(Plasma.Frame):
         self.titleLabel.setText(episode.title+' ('+episode.date+')\n')
         
         self.layout().addItem(self.seriesWidget)
-        self.layout().addItem(self.titleLabel)                            
+        self.layout().addItem(self.titleLabel)
+        
+        self.searchEngines = searchEngines                            
         
         self.setMinimumWidth(250)
         self.setMinimumHeight(self.titleLabel.size().height() + self.seriesWidget.size().height())
-        
-        
+                
+    def contextMenuEvent(self,ev):        
+        menu = QMenu()
+        for eng in self.searchEngines:
+            eng.setEpisode(self.episode)
+            act = QAction(QString(eng.title), menu)
+            act.triggered.connect(eng.search)
+            menu.addAction(act)
+            
+        menu.exec_(ev.screenPos())        
