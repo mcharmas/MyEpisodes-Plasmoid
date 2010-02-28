@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui/sengineconfigdialog.ui'
 #
-# Created: Sun Feb 28 17:53:16 2010
+# Created: Mon Mar  1 00:13:06 2010
 #      by: PyQt4 UI code generator 4.7
 #
 # WARNING! All changes made in this file will be lost!
@@ -16,7 +16,13 @@ class Ui_SEngineConfigDialog(object):
         self.verticalLayout = QtGui.QVBoxLayout(SEngineConfigDialog)
         self.verticalLayout.setObjectName("verticalLayout")
         self.searchEnginesTable = QtGui.QTableView(SEngineConfigDialog)
+        self.searchEnginesTable.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.searchEnginesTable.setProperty("showDropIndicator", False)
+        self.searchEnginesTable.setDragDropOverwriteMode(True)
+        self.searchEnginesTable.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
         self.searchEnginesTable.setObjectName("searchEnginesTable")
+        self.searchEnginesTable.horizontalHeader().setStretchLastSection(True)
+        self.searchEnginesTable.verticalHeader().setVisible(False)
         self.verticalLayout.addWidget(self.searchEnginesTable)
         self.widget = QtGui.QWidget(SEngineConfigDialog)
         self.widget.setObjectName("widget")

@@ -31,4 +31,27 @@ class EnginesConfig(QWidget, Ui_SEngineConfigDialog):
         QWidget.__init__(self)
         self.setupUi(self)
         self.parent = parent
-    
+                
+        self.items = {'dupa':'jasio'}
+        
+        
+        self.tableModel = QStandardItemModel(len(self.items), 2)
+        self.tableModel.setHorizontalHeaderLabels(["Name", "Search URL"])
+        ind=0
+        for i in self.items.keys():
+            sitem1 = QStandardItem(QString(i))
+            sitem2 = QStandardItem(QString(self.items[i]))
+            self.tableModel.setItem(ind, 0, sitem1)
+            self.tableModel.setItem(ind, 1, sitem2)
+            ind+=1
+            
+        self.searchEnginesTable.setModel(self.tableModel)
+        
+        self.newEngineButton.clicked.connect(self.addRow)
+        
+    def addRow(self):        
+        i1 = QStandardItem(QString(""))
+        i2 = QStandardItem(QString(""))
+        self.tableModel.appendRow([i1,i2])
+        
+
