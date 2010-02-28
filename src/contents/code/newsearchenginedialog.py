@@ -2,23 +2,23 @@
 
 # Form implementation generated from reading ui file 'ui/newsearchenginedialog.ui'
 #
-# Created: Sun Feb 28 17:48:42 2010
+# Created: Sun Feb 28 17:53:14 2010
 #      by: PyQt4 UI code generator 4.7
 #
 # WARNING! All changes made in this file will be lost!
 
 from PyQt4 import QtCore, QtGui
 
-class Ui_Form(object):
-    def setupUi(self, Form):
-        Form.setObjectName("Form")
-        Form.resize(460, 146)
-        self.verticalLayout = QtGui.QVBoxLayout(Form)
+class Ui_NewSearchEngineDialog(object):
+    def setupUi(self, NewSearchEngineDialog):
+        NewSearchEngineDialog.setObjectName("NewSearchEngineDialog")
+        NewSearchEngineDialog.resize(460, 146)
+        self.verticalLayout = QtGui.QVBoxLayout(NewSearchEngineDialog)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.label = QtGui.QLabel(Form)
+        self.label = QtGui.QLabel(NewSearchEngineDialog)
         self.label.setObjectName("label")
         self.verticalLayout.addWidget(self.label)
-        self.frame = QtGui.QFrame(Form)
+        self.frame = QtGui.QFrame(NewSearchEngineDialog)
         self.frame.setFrameShape(QtGui.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtGui.QFrame.Raised)
         self.frame.setObjectName("frame")
@@ -39,7 +39,7 @@ class Ui_Form(object):
         self.verticalLayout.addWidget(self.frame)
         spacerItem = QtGui.QSpacerItem(20, 40, QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem)
-        self.widget = QtGui.QWidget(Form)
+        self.widget = QtGui.QWidget(NewSearchEngineDialog)
         self.widget.setObjectName("widget")
         self.horizontalLayout = QtGui.QHBoxLayout(self.widget)
         self.horizontalLayout.setObjectName("horizontalLayout")
@@ -53,14 +53,14 @@ class Ui_Form(object):
         self.horizontalLayout.addWidget(self.cancelButton)
         self.verticalLayout.addWidget(self.widget)
 
-        self.retranslateUi(Form)
-        QtCore.QMetaObject.connectSlotsByName(Form)
+        self.retranslateUi(NewSearchEngineDialog)
+        QtCore.QMetaObject.connectSlotsByName(NewSearchEngineDialog)
 
-    def retranslateUi(self, Form):
-        Form.setWindowTitle(QtGui.QApplication.translate("Form", "Form", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setText(QtGui.QApplication.translate("Form", "In URL defninition you can use {show}, {title}, {series} and {episode} marks.", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_2.setText(QtGui.QApplication.translate("Form", "Engine Name:", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_3.setText(QtGui.QApplication.translate("Form", "URL:", None, QtGui.QApplication.UnicodeUTF8))
-        self.addButton.setText(QtGui.QApplication.translate("Form", "Add", None, QtGui.QApplication.UnicodeUTF8))
-        self.cancelButton.setText(QtGui.QApplication.translate("Form", "Cancel", None, QtGui.QApplication.UnicodeUTF8))
+    def retranslateUi(self, NewSearchEngineDialog):
+        NewSearchEngineDialog.setWindowTitle(QtGui.QApplication.translate("NewSearchEngineDialog", "New Search Engine", None, QtGui.QApplication.UnicodeUTF8))
+        self.label.setText(QtGui.QApplication.translate("NewSearchEngineDialog", "In URL defninition you can use {show}, {title}, {series} and {episode} marks.", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_2.setText(QtGui.QApplication.translate("NewSearchEngineDialog", "Engine Name:", None, QtGui.QApplication.UnicodeUTF8))
+        self.label_3.setText(QtGui.QApplication.translate("NewSearchEngineDialog", "URL:", None, QtGui.QApplication.UnicodeUTF8))
+        self.addButton.setText(QtGui.QApplication.translate("NewSearchEngineDialog", "Add", None, QtGui.QApplication.UnicodeUTF8))
+        self.cancelButton.setText(QtGui.QApplication.translate("NewSearchEngineDialog", "Cancel", None, QtGui.QApplication.UnicodeUTF8))
 

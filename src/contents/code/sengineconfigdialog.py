@@ -2,23 +2,23 @@
 
 # Form implementation generated from reading ui file 'ui/sengineconfigdialog.ui'
 #
-# Created: Sun Feb 28 17:49:07 2010
+# Created: Sun Feb 28 17:53:16 2010
 #      by: PyQt4 UI code generator 4.7
 #
 # WARNING! All changes made in this file will be lost!
 
 from PyQt4 import QtCore, QtGui
 
-class Ui_Form(object):
-    def setupUi(self, Form):
-        Form.setObjectName("Form")
-        Form.resize(400, 300)
-        self.verticalLayout = QtGui.QVBoxLayout(Form)
+class Ui_SEngineConfigDialog(object):
+    def setupUi(self, SEngineConfigDialog):
+        SEngineConfigDialog.setObjectName("SEngineConfigDialog")
+        SEngineConfigDialog.resize(400, 300)
+        self.verticalLayout = QtGui.QVBoxLayout(SEngineConfigDialog)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.searchEnginesTable = QtGui.QTableView(Form)
+        self.searchEnginesTable = QtGui.QTableView(SEngineConfigDialog)
         self.searchEnginesTable.setObjectName("searchEnginesTable")
         self.verticalLayout.addWidget(self.searchEnginesTable)
-        self.widget = QtGui.QWidget(Form)
+        self.widget = QtGui.QWidget(SEngineConfigDialog)
         self.widget.setObjectName("widget")
         self.horizontalLayout = QtGui.QHBoxLayout(self.widget)
         self.horizontalLayout.setObjectName("horizontalLayout")
@@ -32,11 +32,11 @@ class Ui_Form(object):
         self.horizontalLayout.addWidget(self.saveButton)
         self.verticalLayout.addWidget(self.widget)
 
-        self.retranslateUi(Form)
-        QtCore.QMetaObject.connectSlotsByName(Form)
+        self.retranslateUi(SEngineConfigDialog)
+        QtCore.QMetaObject.connectSlotsByName(SEngineConfigDialog)
 
-    def retranslateUi(self, Form):
-        Form.setWindowTitle(QtGui.QApplication.translate("Form", "Form", None, QtGui.QApplication.UnicodeUTF8))
-        self.newEngineButton.setText(QtGui.QApplication.translate("Form", "New Engine", None, QtGui.QApplication.UnicodeUTF8))
-        self.saveButton.setText(QtGui.QApplication.translate("Form", "Save", None, QtGui.QApplication.UnicodeUTF8))
+    def retranslateUi(self, SEngineConfigDialog):
+        SEngineConfigDialog.setWindowTitle(QtGui.QApplication.translate("SEngineConfigDialog", "Search Engine Config", None, QtGui.QApplication.UnicodeUTF8))
+        self.newEngineButton.setText(QtGui.QApplication.translate("SEngineConfigDialog", "New Engine", None, QtGui.QApplication.UnicodeUTF8))
+        self.saveButton.setText(QtGui.QApplication.translate("SEngineConfigDialog", "Save", None, QtGui.QApplication.UnicodeUTF8))
 
