@@ -44,7 +44,7 @@ def getEpisodes(username, password):
     episodes = []
 
     connection = HTTPConnection(host, port)
-    connection.request('GET', '/rss.php?feed=all&uid='+str(username)+'&pwdmd5='+password.hexdigest())
+    connection.request('GET', '/rss.php?feed=today&uid='+str(username)+'&pwdmd5='+password.hexdigest())
     resp = connection.getresponse()
     print resp.status, resp.reason, resp.getheader('Location')
     if resp.status != 200:

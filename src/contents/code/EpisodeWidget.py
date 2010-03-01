@@ -60,6 +60,9 @@ class EpisodeWidget(Plasma.Frame):
         self.setMinimumHeight(self.titleLabel.size().height() + self.seriesWidget.size().height())
                 
     def contextMenuEvent(self,ev):        
+        if not len(self.searchEngines):
+            return
+        
         menu = QMenu()
         for eng in self.searchEngines:
             eng.setEpisode(self.episode)

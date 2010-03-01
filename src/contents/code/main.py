@@ -49,7 +49,6 @@ class HelloWorldApplet(plasmascript.Applet):
         self.layout.setSizePolicy(QSizePolicy(QSizePolicy.Expanding))
         
         self.searchEngines = []
-        self.searchEngines.append(EpisodeSearchEngine("Torrent-Damage", "http://www.torrent-damage.net/torrents.php?searchstr={show}+{series}x{episode}"))                
                                            
         self.initList()            
 
