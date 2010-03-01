@@ -25,12 +25,14 @@ from Episodes import *
 from EpisodeWidget import *
 
 class EpisodesList(Plasma.ScrollWidget):
-    def __init__(self, user, password, searchEngines, parent=None):
+    def __init__(self, user, password, searchEngines, type, parent=None):
         Plasma.ScrollWidget.__init__(self, parent)
         self.info = 'Getting information from MyEpisodes'
         self.user = user
         self.password = password
         self.searchEngines = searchEngines        
+        self.type = type
+        #self.setSizePolicy(QSizePolicy(QSizePolicy.Minimum))
         self.setInfo()
         self.refresh()    
     
@@ -43,7 +45,8 @@ class EpisodesList(Plasma.ScrollWidget):
             error = 1
 
         self.widget = QGraphicsWidget(self)
-        self.widget.setSizePolicy(QSizePolicy(QSizePolicy.Expanding))
+        #self.widget.setSizePolicy(QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding))
+        
         self.wlayout = QGraphicsLinearLayout(Qt.Vertical, self.widget)
         self.wlayout.setSpacing(5)
         self.widget.setLayout(self.wlayout)
@@ -58,12 +61,12 @@ class EpisodesList(Plasma.ScrollWidget):
                     size = size + ep.size().height()
                 self.setWidget(self.widget)
             else: 
-                l = Plasma.Label(self)
-                l.setText('No episodes today.')
+                l = Plasma.Label(self)                
+                l.setText('<center>No episodes today.</center>')
                 self.setWidget(l)                
         else:
             l = Plasma.Label(self)
-            l.setText('Error getting episodes.')
+            l.setText('<center>Error getting episodes.</center>')
             self.setWidget(l)
 
         self.update()
@@ -77,4 +80,4 @@ class EpisodesList(Plasma.ScrollWidget):
         
         
     def getData(self):
-        return getEpisodes(self.user, self.password)
+        return getEpisodes(self.user, self.password, self.type)
