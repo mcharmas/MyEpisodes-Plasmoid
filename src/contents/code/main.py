@@ -98,6 +98,15 @@ class HelloWorldApplet(plasmascript.Applet):
         self.password = gc.readEntry('password', '').toString()
         self.settings['password'] = self.password
         
+        #search engines config format title|url title1|url1
+        engines = gc.readEntry('engines', '').toString()
+        self.settings['engines']=engines
+        self.searchEngines = []
+        for en in engines.split(' '):
+            if en:
+                ep = en.split('|')
+                self.searchEngines.append(EpisodeSearchEngine(ep[0], ep[1]))
+        
         if self.user and self.password:
             return True
         else:
@@ -105,7 +114,7 @@ class HelloWorldApplet(plasmascript.Applet):
     
     def createConfigurationInterface(self, parent):
         self.configWidget = Config(self, self.settings)
-        self.engineConfigWidget = EnginesConfig(self)
+        self.engineConfigWidget = EnginesConfig(self.settings, self)
         parent.addPage(self.configWidget, 'Credentials')
         parent.addPage(self.engineConfigWidget, 'Search Engines')   
         parent.okClicked.connect(self.acceptConfig)
@@ -123,6 +132,8 @@ class HelloWorldApplet(plasmascript.Applet):
         gc = self.config()
         gc.writeEntry('login', settings['login'])
         gc.writeEntry('password', settings['password'])
+        print settings['engines']
+        gc.writeEntry('engines', settings['engines'])
         self.initList()
         
     

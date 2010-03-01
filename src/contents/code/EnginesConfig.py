@@ -27,13 +27,64 @@ from PyKDE4.kdecore import *
 from sengineconfigdialog import Ui_SEngineConfigDialog
 
 class EnginesConfig(QWidget, Ui_SEngineConfigDialog):
-    def __init__(self, parent):
+    def __init__(self, settings, parent):
         QWidget.__init__(self)
         self.setupUi(self)
         self.parent = parent
-                
-        self.items = {'dupa':'jasio'}
+        self.settings = settings
+        self.loadTable()        
         
+        self.newEngineButton.clicked.connect(self.addRow)
+        self.saveButton.clicked.connect(self.apply)
+        
+    def addRow(self):        
+        i1 = QStandardItem(QString(""))
+        i2 = QStandardItem(QString(""))
+        self.tableModel.appendRow([i1,i2])
+        
+    def apply(self):
+        error=0
+        configString=""
+        for i in range(self.tableModel.rowCount()):
+            title = str(self.tableModel.item(i, 0).text())            
+            url = str(self.tableModel.item(i, 1).text())
+            if not title and not url:
+                continue
+            
+            if not title and url:
+                error=1
+                self.showMsgBox('Title cannot be empty.')
+                break
+                
+            if title and not url:
+                error=1
+                self.showMsgBox('URL cannot be empty.')
+                break
+            
+            if title.find(' ')!=-1 or title.find('|')!=-1 or url.find(' ')!=-1 or url.find('|')!=-1:
+                error=1
+                self.showMsgBox('Title and URL cannot contain space or | characters.')
+                break
+            
+            configString+=title+'|'+url+" "
+                
+        if not error:
+            self.settings['engines']=configString
+            self.loadTable()
+            
+    def showMsgBox(self, message):
+        box = QMessageBox()
+        box.setText(message)
+        box.exec_()
+            
+    def loadTable(self):
+        self.items = {}
+        
+        engines = self.settings['engines']
+        for e in engines.split(' '):
+            if e:
+                en = e.split('|')
+                self.items[en[0]]=en[1]
         
         self.tableModel = QStandardItemModel(len(self.items), 2)
         self.tableModel.setHorizontalHeaderLabels(["Name", "Search URL"])
@@ -46,12 +97,6 @@ class EnginesConfig(QWidget, Ui_SEngineConfigDialog):
             ind+=1
             
         self.searchEnginesTable.setModel(self.tableModel)
-        
-        self.newEngineButton.clicked.connect(self.addRow)
-        
-    def addRow(self):        
-        i1 = QStandardItem(QString(""))
-        i2 = QStandardItem(QString(""))
-        self.tableModel.appendRow([i1,i2])
+
         
 

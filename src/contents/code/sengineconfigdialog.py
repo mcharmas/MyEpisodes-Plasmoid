@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'ui/sengineconfigdialog.ui'
 #
-# Created: Mon Mar  1 00:13:06 2010
+# Created: Mon Mar  1 18:58:58 2010
 #      by: PyQt4 UI code generator 4.7
 #
 # WARNING! All changes made in this file will be lost!
@@ -15,6 +15,9 @@ class Ui_SEngineConfigDialog(object):
         SEngineConfigDialog.resize(400, 300)
         self.verticalLayout = QtGui.QVBoxLayout(SEngineConfigDialog)
         self.verticalLayout.setObjectName("verticalLayout")
+        self.label = QtGui.QLabel(SEngineConfigDialog)
+        self.label.setObjectName("label")
+        self.verticalLayout.addWidget(self.label)
         self.searchEnginesTable = QtGui.QTableView(SEngineConfigDialog)
         self.searchEnginesTable.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.searchEnginesTable.setProperty("showDropIndicator", False)
@@ -43,6 +46,8 @@ class Ui_SEngineConfigDialog(object):
 
     def retranslateUi(self, SEngineConfigDialog):
         SEngineConfigDialog.setWindowTitle(QtGui.QApplication.translate("SEngineConfigDialog", "Search Engine Config", None, QtGui.QApplication.UnicodeUTF8))
+        self.label.setText(QtGui.QApplication.translate("SEngineConfigDialog", "In URL defninition you can use:\n"
+"{show}, {title}, {series} and {episode} marks.", None, QtGui.QApplication.UnicodeUTF8))
         self.newEngineButton.setText(QtGui.QApplication.translate("SEngineConfigDialog", "New Engine", None, QtGui.QApplication.UnicodeUTF8))
         self.saveButton.setText(QtGui.QApplication.translate("SEngineConfigDialog", "Save", None, QtGui.QApplication.UnicodeUTF8))
 
