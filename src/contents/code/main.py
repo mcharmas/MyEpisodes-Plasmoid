@@ -21,10 +21,10 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyKDE4.plasma import Plasma
 from PyKDE4 import plasmascript
-from EpisodesList import *
 from Config import *
 from EpisodeSearchEngine import *
 from EnginesConfig import *
+from EpisodePanel import *
 import PyKDE4
 import sip
 
@@ -42,8 +42,7 @@ class HelloWorldApplet(plasmascript.Applet):
         self.theme.setImagePath("widgets/background")
         self.setBackgroundHints(Plasma.Applet.StandardBackground)
         
-        self.list = None
-        self.refreshButton = None
+        self.tabs = None
         
         self.layout = QGraphicsLinearLayout(Qt.Vertical, self.applet)
         self.layout.setSizePolicy(QSizePolicy(QSizePolicy.Expanding))
@@ -66,23 +65,19 @@ class HelloWorldApplet(plasmascript.Applet):
             if item:            
                 sip.delete(item)
         
-        if self.refreshButton:
-            sip.delete(self.refreshButton)
+        if self.tabs:
+            sip.delete(self.tabs)
         
-        self.list = None
-        self.refreshButton = None
-
-        #self.icon = Plasma.Label(self.applet)
-        #self.icon.setImage(unicode(self.package().path() + "contents/icons/myepisodes_logo.jpg"))        
-        #self.layout.addItem(self.icon)
-
+        self.tabs = None
+        
         if self.configComplete:
-            self.list = EpisodesList(self.user, self.password, self.searchEngines, self.applet)
-            self.refreshButton = Plasma.PushButton(self.applet)
-            self.refreshButton.setText("Refresh")
-            self.refreshButton.clicked.connect(self.list.refresh)
-            self.layout.addItem(self.list)
-            self.layout.addItem(self.refreshButton)                 
+            self.tabs = Plasma.TabBar(self.applet)            
+        
+            self.tabs.addTab('Yesterday', EpisodePanel(self.user, self.password, self.searchEngines, "yesterday", self.applet))
+            self.tabs.addTab('Today', EpisodePanel(self.user, self.password, self.searchEngines, "today", self.applet))
+            self.tabs.addTab('Tomorrow', EpisodePanel(self.user, self.password, self.searchEngines, "tomorrow", self.applet))
+                        
+            self.layout.addItem(self.tabs)                 
         else:
             self.list = Plasma.Label(self.applet)
             self.list.setText('<b>Applet is not configured.</b>')
