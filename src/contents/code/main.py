@@ -24,7 +24,7 @@ from PyKDE4 import plasmascript
 from Config import *
 from EpisodeSearchEngine import *
 from EnginesConfig import *
-from EpisodePanel import *
+from EpisodesList import *
 import PyKDE4
 import sip
 
@@ -43,9 +43,10 @@ class HelloWorldApplet(plasmascript.Applet):
         self.setBackgroundHints(Plasma.Applet.StandardBackground)
         
         self.tabs = None
+        self.button = None
         
         self.layout = QGraphicsLinearLayout(Qt.Vertical, self.applet)
-        self.layout.setSizePolicy(QSizePolicy(QSizePolicy.Expanding))
+        #self.layout.setSizePolicy(QSizePolicy(QSizePolicy.Expanding))
         
         self.searchEngines = []
                                            
@@ -54,7 +55,7 @@ class HelloWorldApplet(plasmascript.Applet):
         self.applet.setLayout(self.layout)
 
         self.resize(300, 250)
-
+        
     def initList(self):
         self.configComplete = self.readConfig()
         
@@ -65,23 +66,41 @@ class HelloWorldApplet(plasmascript.Applet):
             if item:            
                 sip.delete(item)
         
-        if self.tabs:
-            sip.delete(self.tabs)
+        if self.button:
+            sip.delete(self.button)
         
         self.tabs = None
+        self.button = None
         
         if self.configComplete:
-            self.tabs = Plasma.TabBar(self.applet)            
-        
-            self.tabs.addTab('Yesterday', EpisodePanel(self.user, self.password, self.searchEngines, "yesterday", self.applet))
-            self.tabs.addTab('Today', EpisodePanel(self.user, self.password, self.searchEngines, "today", self.applet))
-            self.tabs.addTab('Tomorrow', EpisodePanel(self.user, self.password, self.searchEngines, "tomorrow", self.applet))
-                        
-            self.layout.addItem(self.tabs)                 
+            self.tabs = Plasma.TabBar(self.applet)
+            self.button = Plasma.PushButton()
+            self.button.setText("Refresh")
+            self.button.setSizePolicy(QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Fixed))
+            
+            el1=EpisodesList(self.user, self.password, self.searchEngines, 'yesterday', self.applet)
+            el2=EpisodesList(self.user, self.password, self.searchEngines, 'today', self.applet)
+            el3=EpisodesList(self.user, self.password, self.searchEngines, 'tomorrow', self.applet) 
+            
+            self.button.clicked.connect(el1.refresh)
+            self.button.clicked.connect(el2.refresh)
+            self.button.clicked.connect(el3.refresh)                 
+            
+            self.tabs.addTab('Yesterday', el1)
+            self.tabs.addTab('Today', el2)
+            self.tabs.addTab('Tomorrow', el3)
+                    
+            self.layout.addItem(self.tabs)
+            self.layout.addItem(self.button)
+                             
         else:
             self.list = Plasma.Label(self.applet)
-            self.list.setText('<b>Applet is not configured.</b>')
+            self.list.setText('<b><center>Applet is not configured.<center></b>')
             self.layout.addItem(self.list)
+        
+        if self.tabs:
+            self.tabs.setCurrentIndex(1)
+        
         self.update()
 
     def readConfig(self):            
