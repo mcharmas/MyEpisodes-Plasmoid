@@ -14,14 +14,14 @@ class EpisodeSearchEngine(QObject):
         self.episode = None
 
     def search(self):
-        nstr = self.cstr
+        nstr = str(self.cstr)
                 
         nstr = nstr.replace(self.showString, str(self.episode.show))
         nstr = nstr.replace(self.titleString, self.episode.title)
         nstr = nstr.replace(self.seriesString, self.episode.series)
         nstr = nstr.replace(self.episodeString, self.episode.episodeNr)
         
-        webbrowser.open_new(nstr)
+        webbrowser.open_new(nstr)        
         
     def setEpisode(self, ep):
         self.episode = ep 
