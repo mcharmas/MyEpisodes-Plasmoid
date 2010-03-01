@@ -9,7 +9,7 @@ class EpisodeSearchEngine(QObject):
         self.cstr = cstr
         self.showString = "{show}"
         self.titleString = "{title}"
-        self.seriesString = "{series}"
+        self.seasonString = "{season}"
         self.episodeString = "{episode}"
         self.episode = None
 
@@ -18,7 +18,7 @@ class EpisodeSearchEngine(QObject):
                 
         nstr = nstr.replace(self.showString, str(self.episode.show))
         nstr = nstr.replace(self.titleString, self.episode.title)
-        nstr = nstr.replace(self.seriesString, self.episode.series)
+        nstr = nstr.replace(self.seasonString, self.episode.season)
         nstr = nstr.replace(self.episodeString, self.episode.episodeNr)
         
         webbrowser.open_new(nstr)        

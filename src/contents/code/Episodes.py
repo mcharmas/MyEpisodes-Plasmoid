@@ -30,7 +30,7 @@ class Episode:
         self.title = title[1:-1]
         self.date = date[1:-1]
         self.link = link
-        self.series = self.episode.split('x')[0]
+        self.season = self.episode.split('x')[0]
         self.episodeNr = self.episode.split('x')[1]
         
     def str(self):
