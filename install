@@ -1,0 +1,5 @@
+plasmapkg -r myEpisodes
+./exec
+plasmapkg -i MyEpisodes.plasmoid
+sleep 3
+plasmoidviewer -c desktop myEpisodes
