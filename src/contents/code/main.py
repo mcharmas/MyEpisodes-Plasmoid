@@ -1,4 +1,5 @@
-"""Author: Michal Charmas
+"""
+Author: Michal Charmas
 """
 
 """ This file is part of MyEpisodes Plasmoid.
@@ -82,9 +83,9 @@ class HelloWorldApplet(plasmascript.Applet):
             el2=EpisodesList(self.user, self.password, self.searchEngines, 'today', self.applet)
             el3=EpisodesList(self.user, self.password, self.searchEngines, 'tomorrow', self.applet) 
             
-            self.button.clicked.connect(el1.refresh)
-            self.button.clicked.connect(el2.refresh)
-            self.button.clicked.connect(el3.refresh)                 
+            self.button.clicked.connect(el1.updateData)
+            self.button.clicked.connect(el2.updateData)
+            self.button.clicked.connect(el3.updateData)                 
             
             self.tabs.addTab('Yesterday', el1)
             self.tabs.addTab('Today', el2)

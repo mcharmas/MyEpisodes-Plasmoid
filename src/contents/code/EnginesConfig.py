@@ -1,5 +1,5 @@
-
-"""Author: Michal Charmas
+"""
+Author: Michal Charmas
 """
 
 """ This file is part of MyEpisodes Plasmoid.

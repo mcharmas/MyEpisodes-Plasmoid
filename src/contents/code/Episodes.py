@@ -1,4 +1,5 @@
-"""Author: Michal Charmas
+"""
+Author: Michal Charmas
 """
 
 """ This file is part of MyEpisodes Plasmoid.
@@ -17,6 +18,9 @@
     along with MyEpisodes Plasmoid.  If not, see <http://www.gnu.org/licenses/>.
 """
 
+from PyQt4 import QtCore
+from PyKDE4 import kio
+from PyKDE4.kdecore import KUrl
 from hashlib import md5
 from httplib import HTTPConnection
 from xml.dom import minidom
@@ -37,40 +41,73 @@ class Episode:
         return self.show + " " + self.episode + " " + self.title + " " + self.date 
 
 
-def getEpisodes(username, password, type):    
-    password = md5(str(password))
-    host = 'myepisodes.com'
-    port = 80
-    episodes = []
-
-    connection = HTTPConnection(host, port)
-    connection.request('GET', '/rss.php?feed='+str(type)+'&uid='+str(username)+'&pwdmd5='+password.hexdigest())
-    resp = connection.getresponse()
-    print resp.status, resp.reason, resp.getheader('Location')
-    if resp.status != 200:
-        connection.close()
-        raise Exception('Bad URL?!')
+class EpisodeGetter(QtCore.QObject):
     
-    data = resp.read()
-    connection.close()
-    if not data:
-        raise Exception('Bad credentials.')
-
-
-    DOMTree = minidom.parseString(data)
-    cNodes = DOMTree.childNodes
-    try:    
-        for i in cNodes[0].getElementsByTagName("item"):
-            title = i.getElementsByTagName("title")[0].childNodes[0].toxml()
-            title = title[1:-1]
-            title = title.split('][')
-            link = i.getElementsByTagName("link")[0].childNodes[0].toxml()
-            episodes.append(Episode(title[0], title[1], title[2], title[3], link))
-    except:
-        return []
-
-    for e in episodes:
-        print e.str()
+    ERROR_NO = 0
+    ERROR_CONNECTION = 1
+    ERROR_CREDENTIALS = 2
+    ERROR_PARSING = 3
+    
+    completed = QtCore.pyqtSignal()
+    
+    def __init__(self, username, password, type, parent=None):
+        QtCore.QObject.__init__(self,parent)
+        self.username = username
+        self.password = md5(str(password))
+        self.type = type
+        self.host = 'http://myepisodes.com/'
+        self.port = 80
+        self.url = self.host+'/rss.php?feed='+str(self.type)+'&uid='+str(self.username)+'&pwdmd5='+self.password.hexdigest()
+        self.data = None
+        self.error = self.ERROR_NO
+        self.job = None
+            
+    def getError(self):
+         return self.error
+     
+    def getData(self):
+         return self.data
+     
+    def start(self):
+        url = KUrl(self.url)
+        self.job = kio.KIO.storedGet(url, kio.KIO.Reload, kio.KIO.HideProgressInfo)
+        self.job.result.connect(self.resultData)
         
-    return episodes
+    def resultData(self, job):
+        print self.type + ': Got data.'
+        if job.error() <> 0:
+            self.error = self.ERROR_CONNECTION
+            print 'Error getting feed: '+str(job.error())+' '+job.errorText()
+        else:
+            self.data = self.parseFeed(job.data())            
+        
+        self.completed.emit()
+    
+    def parseFeed(self, dataToParse):
+        if not dataToParse:
+            self.error = self.ERROR_CREDENTIALS
+            return None
+            
+        episodes = []
+        DOMTree = minidom.parseString(dataToParse)
+        cNodes = DOMTree.childNodes
+        try:    
+            for i in cNodes[0].getElementsByTagName("item"):
+                title = i.getElementsByTagName("title")[0].childNodes[0].toxml()
+                if(title == 'No Episodes'):
+                    return []
+                title = title[1:-1]
+                title = title.split('][')
+                link = i.getElementsByTagName("link")[0].childNodes[0].toxml()
+                episodes.append(Episode(title[0], title[1], title[2], title[3], link))
+        except:
+            self.error = self.ERROR_PARSING
+            return None
+    
+        print "##### EPISODES ######"
+        for e in episodes:
+            print e.str()
+        print "### END EPISODES ####"
+            
+        return episodes
     

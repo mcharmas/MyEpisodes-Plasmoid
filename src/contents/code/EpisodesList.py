@@ -1,4 +1,5 @@
-"""Author: Michal Charmas
+"""
+Author: Michal Charmas
 """
 
 """ This file is part of MyEpisodes Plasmoid.
@@ -19,10 +20,14 @@
 
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
+from PyQt4 import *
 from PyKDE4.plasma import Plasma
 from PyKDE4 import plasmascript
+from PyKDE4 import kdecore
 from Episodes import *
 from EpisodeWidget import *
+import sip
+
 
 class EpisodesList(Plasma.ScrollWidget):
     def __init__(self, user, password, searchEngines, type, parent=None):
@@ -33,17 +38,19 @@ class EpisodesList(Plasma.ScrollWidget):
         self.searchEngines = searchEngines        
         self.type = type
         #self.setSizePolicy(QSizePolicy(QSizePolicy.Minimum))
+        self.initGetter()
         self.setInfo()
-        self.refresh()    
+        self.updateData()
+        #self.refresh()
     
-    def refresh(self):
-        self.setInfo()
-        error = 0
-        try:
-            self.episodes = self.getData()            
-        except:
-            error = 1
-
+    def initGetter(self):
+        self.getter = EpisodeGetter(self.user, self.password, self.type, self)
+        self.getter.completed.connect(self.refresh)        
+    
+    def refresh(self):                
+        error = self.getter.getError()        
+        episodes = self.getter.getData()
+        
         self.widget = QGraphicsWidget(self)
         #self.widget.setSizePolicy(QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding))
         
@@ -53,9 +60,9 @@ class EpisodesList(Plasma.ScrollWidget):
         
         size = 0
 
-        if not error:
-            if len(self.episodes):
-                for e in self.episodes:
+        if error == 0:
+            if len(episodes):
+                for e in episodes:
                     ep = EpisodeWidget(e, self.searchEngines, self.widget)
                     self.wlayout.addItem(ep)
                     size = size + ep.size().height()
@@ -64,11 +71,22 @@ class EpisodesList(Plasma.ScrollWidget):
                 l = Plasma.Label(self)                
                 l.setText('<center>No episodes today.</center>')
                 self.setWidget(l)                
-        else:
+        elif error == EpisodeGetter.ERROR_CONNECTION:
             l = Plasma.Label(self)
             l.setText('<center>Error getting episodes.</center>')
             self.setWidget(l)
-
+        elif error == EpisodeGetter.ERROR_CREDENTIALS:
+            l = Plasma.Label(self)
+            l.setText('<center>Wrong credentials.</center>')
+            self.setWidget(l)
+        else:
+            l = Plasma.Label(self)
+            l.setText('<center>Unknown error.</center>')
+            self.setWidget(l)            
+        
+        sip.delete(self.getter)
+        self.initGetter()
+        
         self.update()
         
     def setInfo(self):
@@ -76,8 +94,10 @@ class EpisodesList(Plasma.ScrollWidget):
         infoLabel = Plasma.Label(self)    
         infoLabel.setText(self.info)                
         self.setWidget(infoLabel)
-        self.update()
+        self.update()        
         
-        
-    def getData(self):
-        return getEpisodes(self.user, self.password, self.type)
+    def updateData(self):        
+        self.info = 'Getting information from MyEpisodes'
+        self.setInfo()
+        self.getter.start()
+    
