@@ -1,7 +1,0 @@
-#/bin/bash
-cd ~/plasmoids/MyEpisodes/src
-zip ../MyEpisodes.plasmoid -r ./*
-cd ..
-plasmapkg -r myEpisodes
-plasmapkg -i MyEpisodes.plasmoid
-plasmoidviewer -t Oxygen myEpisodes
