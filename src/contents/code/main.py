@@ -45,12 +45,15 @@ class HelloWorldApplet(plasmascript.Applet):
         
         self.tabs = None
         self.button = None
+        self.lastUpdateLabel = None
+        
+        self.lastUpdateText = 'Last update:'
         
         self.layout = QGraphicsLinearLayout(Qt.Vertical, self.applet)
         #self.layout.setSizePolicy(QSizePolicy(QSizePolicy.Expanding))
         
         self.searchEngines = []
-                                           
+          
         self.initList()            
 
         self.applet.setLayout(self.layout)
@@ -72,12 +75,19 @@ class HelloWorldApplet(plasmascript.Applet):
         
         self.tabs = None
         self.button = None
+        self.lastUpdateLabel = None
         
         if self.configComplete:
             self.tabs = Plasma.TabBar(self.applet)
+            self.tabs.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
             self.button = Plasma.PushButton()
             self.button.setText("Refresh")
-            self.button.setSizePolicy(QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Fixed))
+            self.button.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed))
+            
+            self.lastUpdateLabel = Plasma.Label()            
+            self.lastUpdateLabel.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed))
+            self.lastUpdateLabel.setMaximumHeight(12)
+            self.lastUpdateLabel.setText('Last update: ?')            
             
             el1=EpisodesList(self.user, self.password, self.searchEngines, 'yesterday', self.applet)
             el2=EpisodesList(self.user, self.password, self.searchEngines, 'today', self.applet)
@@ -85,24 +95,35 @@ class HelloWorldApplet(plasmascript.Applet):
             
             self.button.clicked.connect(el1.updateData)
             self.button.clicked.connect(el2.updateData)
-            self.button.clicked.connect(el3.updateData)                 
+            self.button.clicked.connect(el3.updateData)           
+            self.button.clicked.connect(self.dateUpdate)      
             
             self.tabs.addTab('Yesterday', el1)
             self.tabs.addTab('Today', el2)
             self.tabs.addTab('Tomorrow', el3)
                     
-            self.layout.addItem(self.tabs)
+            self.layout.addItem(self.tabs)            
+            self.layout.addItem(self.lastUpdateLabel)
             self.layout.addItem(self.button)
+
+            self.dateUpdate()
                              
         else:
             self.list = Plasma.Label(self.applet)
-            self.list.setText('<b><center>Applet is not configured.<center></b>')
+            self.list.setText('<b><center>Applet is not configured.</center></b>')
             self.layout.addItem(self.list)
         
         if self.tabs:
             self.tabs.setCurrentIndex(1)
         
         self.update()
+        
+    def dateUpdate(self):
+        if self.lastUpdateLabel <> None:
+            date = QDateTime.currentDateTime()
+            hour = date.toString('hh:mm:ss')
+            date = date.toString('d MMM  yy')
+            self.lastUpdateLabel.setText(self.lastUpdateText+' '+hour+', '+date)
 
     def readConfig(self):            
         gc = self.config()
@@ -149,8 +170,7 @@ class HelloWorldApplet(plasmascript.Applet):
         print settings['engines']
         gc.writeEntry('engines', settings['engines'])
         self.initList()
-        
-    
+            
     def cancelConfig(self):
         pass
              
