@@ -55,7 +55,7 @@ class HelloWorldApplet(plasmascript.Applet):
 
         self.applet.setLayout(self.layout)
 
-        self.resize(300, 250)
+        self.resize(350, 300)
         
     def initList(self):
         self.configComplete = self.readConfig()

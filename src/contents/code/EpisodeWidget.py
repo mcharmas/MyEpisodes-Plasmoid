@@ -46,11 +46,14 @@ class EpisodeWidget(Plasma.Frame):
         
         self.seriesWidget.layout().addItem(self.showLabel)
         self.seriesWidget.layout().addItem(self.epLabel)
+        self.seriesWidget.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum))
         #s#########################
                         
         self.titleLabel = Plasma.Label(self)
         self.titleLabel.setAlignment(Qt.AlignCenter)
         self.titleLabel.setText(episode.title+' ('+episode.date+')\n')
+        
+        self.titleLabel.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum))
         
         self.layout().addItem(self.seriesWidget)
         self.layout().addItem(self.titleLabel)
@@ -58,8 +61,16 @@ class EpisodeWidget(Plasma.Frame):
         self.searchEngines = searchEngines                            
         
         self.setMinimumWidth(250)
-        self.setMinimumHeight(self.titleLabel.size().height() + self.seriesWidget.size().height())
                 
+        #self.setMinimumHeight(self.titleLabel.size().height() + self.seriesWidget.size().height())
+        #self.setMaximumHeight(self.titleLabel.size().height() + self.seriesWidget.size().height())
+        self.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum))
+
+    def resizeEvent(self, ev):
+        Plasma.Frame.resizeEvent(self,ev)
+        print "top: " + str(self.seriesWidget.size().height())
+        print "down: " + str(self.titleLabel.size().height())
+                    
     def contextMenuEvent(self,ev):        
         if not len(self.searchEngines):
             return
@@ -71,4 +82,4 @@ class EpisodeWidget(Plasma.Frame):
             act.triggered.connect(eng.search)
             menu.addAction(act)
             
-        menu.exec_(ev.screenPos())        
+        menu.exec_(ev.screenPos())
