@@ -1,5 +1,5 @@
 plasmapkg -r myEpisodes
-./exec
+./makepkg
 plasmapkg -i MyEpisodes.plasmoid
 sleep 3
 kbuildsycoca4

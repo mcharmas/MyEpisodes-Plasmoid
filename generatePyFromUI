@@ -1,0 +1,8 @@
+srcpath="src/contents/ui/"
+dstpath="src/contents/code/generated/"
+for f in $(ls $srcpath*.ui); do
+	class=${f%.*}
+	class=${class##*/}
+	#echo $class
+	pyuic4 -o $dstpath$class.py $f
+done
