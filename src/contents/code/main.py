@@ -46,6 +46,7 @@ class HelloWorldApplet(plasmascript.Applet):
         self.tabs = None
         self.button = None
         self.lastUpdateLabel = None
+        self.timer = None
         
         self.lastUpdateText = 'Last update:'
         
@@ -73,6 +74,12 @@ class HelloWorldApplet(plasmascript.Applet):
         if self.button:
             sip.delete(self.button)
         
+        if self.timer:
+            sip.delete(self.timer)
+            self.timer = None
+            
+          
+        
         self.tabs = None
         self.button = None
         self.lastUpdateLabel = None
@@ -86,13 +93,23 @@ class HelloWorldApplet(plasmascript.Applet):
             
             self.lastUpdateLabel = Plasma.Label()            
             self.lastUpdateLabel.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed))
-            self.lastUpdateLabel.setMaximumHeight(12)
+            self.lastUpdateLabel.setMaximumHeight(13)
+            #print self.lastUpdateLabel.sizeHint(0).height()
             self.lastUpdateLabel.setText('Last update: ?')            
             
             el1=EpisodesList(self.user, self.password, self.searchEngines, 'yesterday', self.applet)
             el2=EpisodesList(self.user, self.password, self.searchEngines, 'today', self.applet)
             el3=EpisodesList(self.user, self.password, self.searchEngines, 'tomorrow', self.applet) 
-            
+
+            if self.settings['enableTimer']:
+                self.timer = QTimer(self)                
+                self.timer.setInterval(self.settings['timerInterval'][0] * 60000)
+                self.timer.timeout.connect(el1.updateData)  
+                self.timer.timeout.connect(el2.updateData)
+                self.timer.timeout.connect(el3.updateData)
+                self.timer.timeout.connect(self.dateUpdate)
+                self.timer.start()
+                
             self.button.clicked.connect(el1.updateData)
             self.button.clicked.connect(el2.updateData)
             self.button.clicked.connect(el3.updateData)           
@@ -102,9 +119,12 @@ class HelloWorldApplet(plasmascript.Applet):
             self.tabs.addTab('Today', el2)
             self.tabs.addTab('Tomorrow', el3)
                     
-            self.layout.addItem(self.tabs)            
-            self.layout.addItem(self.lastUpdateLabel)
-            self.layout.addItem(self.button)
+            self.layout.addItem(self.tabs)
+            if self.settings['showLastUpdate']:                  
+                self.layout.addItem(self.lastUpdateLabel)
+            
+            if self.settings['showRefreshButton']:
+                self.layout.addItem(self.button)
 
             self.dateUpdate()
                              
@@ -122,7 +142,7 @@ class HelloWorldApplet(plasmascript.Applet):
         if self.lastUpdateLabel <> None:
             date = QDateTime.currentDateTime()
             hour = date.toString('hh:mm:ss')
-            date = date.toString('d MMM  yy')
+            date = date.toString('d MMM yyyy')
             self.lastUpdateLabel.setText(self.lastUpdateText+' '+hour+', '+date)
 
     def readConfig(self):            
@@ -132,6 +152,12 @@ class HelloWorldApplet(plasmascript.Applet):
         
         self.password = gc.readEntry('password', '').toString()
         self.settings['password'] = self.password
+        
+        #TODO: add this settings to configuration
+        self.settings['showRefreshButton'] = gc.readEntry('showRefreshButton',False).toBool()
+        self.settings['showLastUpdate'] = gc.readEntry('showLastUpdate', True).toBool()
+        self.settings['enableTimer'] = gc.readEntry('enableTimer', True).toBool()
+        self.settings['timerInterval'] = gc.readEntry('timerInterval', 5).toInt()
         
         #search engines config format title|url title1|url1
         engines = gc.readEntry('engines', '').toString()
