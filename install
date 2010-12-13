@@ -2,4 +2,5 @@ plasmapkg -r myEpisodes
 ./exec
 plasmapkg -i MyEpisodes.plasmoid
 sleep 3
+kbuildsycoca4
 plasmoidviewer -c desktop myEpisodes

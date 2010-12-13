@@ -24,7 +24,8 @@ from PyKDE4.plasma import Plasma
 from PyKDE4 import plasmascript
 from Config import *
 from EpisodeSearchEngine import *
-from EnginesConfig import *
+#from ConfigCredentials import *
+#from ConfigEngines import *
 from EpisodesList import *
 import PyKDE4
 import sip
@@ -174,10 +175,12 @@ class HelloWorldApplet(plasmascript.Applet):
             return False          
     
     def createConfigurationInterface(self, parent):
-        self.configWidget = Config(self, self.settings)
-        self.engineConfigWidget = EnginesConfig(self.settings, self)
+        self.configWidget = ConfigCredentials(self.settings)
+        self.engineConfigWidget = ConfigEngines(self.settings)
+        self.optionsConfigWidget = ConfigOptions(self.settings)
         parent.addPage(self.configWidget, 'Credentials')
-        parent.addPage(self.engineConfigWidget, 'Search Engines')   
+        parent.addPage(self.engineConfigWidget, 'Search Engines')
+        parent.addPage(self.optionsConfigWidget, 'Options')   
         parent.okClicked.connect(self.acceptConfig)
         parent.cancelClicked.connect(self.cancelConfig)                
         

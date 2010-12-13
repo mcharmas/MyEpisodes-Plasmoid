@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>SEngineConfigDialog</class>
- <widget class="QWidget" name="SEngineConfigDialog">
+ <class>SettingsTabSEngines</class>
+ <widget class="QWidget" name="SettingsTabSEngines">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -41,12 +41,6 @@
      </attribute>
      <attribute name="verticalHeaderVisible">
       <bool>false</bool>
-     </attribute>
-     <attribute name="verticalHeaderVisible">
-      <bool>false</bool>
-     </attribute>
-     <attribute name="horizontalHeaderStretchLastSection">
-      <bool>true</bool>
      </attribute>
     </widget>
    </item>
