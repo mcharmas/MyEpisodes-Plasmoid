@@ -48,6 +48,7 @@ class HelloWorldApplet(plasmascript.Applet):
         self.button = None
         self.lastUpdateLabel = None
         self.timer = None
+        self.centralWidget = None
         
         self.lastUpdateText = 'Last update:'
         
@@ -65,79 +66,91 @@ class HelloWorldApplet(plasmascript.Applet):
     def initList(self):
         self.configComplete = self.readConfig()
         
+        print "DELETING"
         print self.layout.count()
-        for i in range(self.layout.count()):
-            item = self.layout.itemAt(i)
-            self.layout.removeAt(i)
-            if item:            
-                sip.delete(item)
         
-        if self.button:
-            sip.delete(self.button)
+        if self.centralWidget:
+            self.layout.removeItem(self.centralWidget)
+            sip.delete(self.centralWidget)
+            self.centralWidget = None
+        
+#        for i in range(self.layout.count()):
+#            item = self.layout.itemAt(i)
+#            self.layout.removeAt(i)
+#            if item:            
+#                sip.delete(item)
+#        
+        #if self.tabs:
+        #    sip.delete(self.tabs)
+        
+        #if self.button:
+        #    sip.delete(self.button)
         
         if self.timer:
             sip.delete(self.timer)
-            self.timer = None
-            
-          
+            self.timer = None                    
         
         self.tabs = None
         self.button = None
         self.lastUpdateLabel = None
         
+        self.centralWidget = QGraphicsWidget(self.applet)
+        self.centralWidget.setLayout(QGraphicsLinearLayout(Qt.Vertical, self.centralWidget))        
+        self.centralWidget.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
+        
         if self.configComplete:
-            self.tabs = Plasma.TabBar(self.applet)
+            self.tabs = Plasma.TabBar(self.centralWidget)
             self.tabs.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding))
-            self.button = Plasma.PushButton()
-            self.button.setText("Refresh")
-            self.button.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed))
-            
-            self.lastUpdateLabel = Plasma.Label()            
-            self.lastUpdateLabel.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed))
-            self.lastUpdateLabel.setMaximumHeight(13)
-            #print self.lastUpdateLabel.sizeHint(0).height()
-            self.lastUpdateLabel.setText('Last update: ?')            
-            
+
             el1=EpisodesList(self.user, self.password, self.searchEngines, 'yesterday', self.applet)
             el2=EpisodesList(self.user, self.password, self.searchEngines, 'today', self.applet)
-            el3=EpisodesList(self.user, self.password, self.searchEngines, 'tomorrow', self.applet) 
-
-            if self.settings['enableTimer']:
-                self.timer = QTimer(self)                
-                self.timer.setInterval(self.settings['timerInterval'][0] * 60000)
-                self.timer.timeout.connect(el1.updateData)  
-                self.timer.timeout.connect(el2.updateData)
-                self.timer.timeout.connect(el3.updateData)
-                self.timer.timeout.connect(self.dateUpdate)
-                self.timer.start()
-                
-            self.button.clicked.connect(el1.updateData)
-            self.button.clicked.connect(el2.updateData)
-            self.button.clicked.connect(el3.updateData)           
-            self.button.clicked.connect(self.dateUpdate)      
+            el3=EpisodesList(self.user, self.password, self.searchEngines, 'tomorrow', self.applet)
             
             self.tabs.addTab('Yesterday', el1)
             self.tabs.addTab('Today', el2)
             self.tabs.addTab('Tomorrow', el3)
-                    
-            self.layout.addItem(self.tabs)
-            if self.settings['showLastUpdate']:                  
-                self.layout.addItem(self.lastUpdateLabel)
             
-            if self.settings['showRefreshButton']:
-                self.layout.addItem(self.button)
+            self.centralWidget.layout().addItem(self.tabs)
+  
+            if self.settings['enableTimer']:
+                self.timer = QTimer(self)                
+                self.timer.setInterval(self.settings['timerInterval'] * 60000)
+                self.timer.timeout.connect(el1.updateData)  
+                self.timer.timeout.connect(el2.updateData)
+                self.timer.timeout.connect(el3.updateData)
+                self.timer.timeout.connect(self.dateUpdate)
+                self.timer.start()            
 
+            if self.settings['showLastUpdate']:                                  
+                self.lastUpdateLabel = Plasma.Label(self.centralWidget)            
+                self.lastUpdateLabel.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed))
+                self.lastUpdateLabel.setMaximumHeight(15)            
+                self.lastUpdateLabel.setText('Last update: ?')            
+                self.centralWidget.layout().addItem(self.lastUpdateLabel)                                                          
+            
+            if self.settings['showRefreshButton']:                
+                self.button = Plasma.PushButton(self.centralWidget)
+                self.button.setText("Refresh")
+                self.button.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed))
+                self.button.clicked.connect(el1.updateData)
+                self.button.clicked.connect(el2.updateData)
+                self.button.clicked.connect(el3.updateData)           
+                self.button.clicked.connect(self.dateUpdate)
+                self.centralWidget.layout().addItem(self.button)
+            
+            self.layout.addItem(self.centralWidget)
             self.dateUpdate()
                              
         else:
-            self.list = Plasma.Label(self.applet)
-            self.list.setText('<b><center>Applet is not configured.</center></b>')
-            self.layout.addItem(self.list)
+            self.centralWidget = Plasma.Label(self.applet)
+            self.centralWidget.setText('<b><center>Applet is not configured.</center></b>')
+            self.layout.addItem(self.centralWidget)
         
         if self.tabs:
             self.tabs.setCurrentIndex(1)
         
-        self.update()
+        self.applet.update()
+        #self.update()
         
     def dateUpdate(self):
         if self.lastUpdateLabel <> None:
@@ -158,7 +171,7 @@ class HelloWorldApplet(plasmascript.Applet):
         self.settings['showRefreshButton'] = gc.readEntry('showRefreshButton',False).toBool()
         self.settings['showLastUpdate'] = gc.readEntry('showLastUpdate', True).toBool()
         self.settings['enableTimer'] = gc.readEntry('enableTimer', True).toBool()
-        self.settings['timerInterval'] = gc.readEntry('timerInterval', 5).toInt()
+        self.settings['timerInterval'] = gc.readEntry('timerInterval', 5).toInt()[0]
         
         #search engines config format title|url title1|url1
         engines = gc.readEntry('engines', '').toString()
@@ -195,9 +208,14 @@ class HelloWorldApplet(plasmascript.Applet):
         settings = self.configWidget.getSettings()
         gc = self.config()
         gc.writeEntry('login', settings['login'])
-        gc.writeEntry('password', settings['password'])
-        print settings['engines']
+        gc.writeEntry('password', settings['password'])        
         gc.writeEntry('engines', settings['engines'])
+
+        gc.writeEntry('showRefreshButton', settings['showRefreshButton'])
+        gc.writeEntry('showLastUpdate', settings['showLastUpdate'])
+        gc.writeEntry('enableTimer', settings['enableTimer'])
+        gc.writeEntry('timerInterval', settings['timerInterval'])                                
+        
         self.initList()
             
     def cancelConfig(self):

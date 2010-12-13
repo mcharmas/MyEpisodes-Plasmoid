@@ -138,18 +138,47 @@ class ConfigOptions(QWidget, Ui_SettingsTabOptions):
         self.updateInfoBox.stateChanged.connect(self.showLabelBoxChanged)
         self.automaticUpdatesBox.stateChanged.connect(self.automaticUpdatesBoxChanged)
         self.updateIntervalBox.valueChanged.connect(self.updateIntervalBoxChanged)
+        
+        if self.settings['showRefreshButton']:
+            self.refreshButtonBox.setCheckState(2)
+        
+        if self.settings['showLastUpdate']:
+            self.updateInfoBox.setCheckState(2)
+            
+        if self.settings['enableTimer']:
+            self.automaticUpdatesBox.setCheckState(2)
+            
+        self.updateIntervalBox.setValue(self.settings['timerInterval'])
     
-    def refreshBoxChanged(self):
-        print "rf"
+    def refreshBoxChanged(self, x):
+        if x == 0:
+            res = False
+            if not self.settings['enableTimer']:
+                self.automaticUpdatesBox.setCheckState(2)
+                self.automaticUpdatesBoxChanged(2) 
+        else:
+            res = True
+        self.settings['showRefreshButton'] = res
     
-    def showLabelBoxChanged(self):
-        print "lab"
+    def showLabelBoxChanged(self, x):
+        if x == 0:
+            res = False
+        else:
+            res = True
+        self.settings['showLastUpdate'] = res
     
-    def automaticUpdatesBoxChanged(self):
-        print "aut"
+    def automaticUpdatesBoxChanged(self, x):
+        if x == 0:
+            self.updateIntervalBox.setEnabled(False)
+            self.settings['enableTimer'] = False
+            self.refreshBoxChanged(2)
+            self.refreshButtonBox.setCheckState(2)
+        else:
+            self.updateIntervalBox.setEnabled(True)
+            self.settings['enableTimer'] = True
     
     def updateIntervalBoxChanged(self, x):
-        print "int"
+        self.settings['timerInterval'] = x
     
     def getSettings(self):
         return self.settings
