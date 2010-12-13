@@ -36,12 +36,12 @@ class EpisodesList(Plasma.ScrollWidget):
         self.password = password
         self.searchEngines = searchEngines        
         self.type = type
-        #self.setSizePolicy(QSizePolicy(QSizePolicy.Minimum))
+        self.widget = None
+
         self.initGetter()
         self.updateData()
         
         self.setHorizontalScrollBarPolicy(1)
-        #self.refresh()
     
     def initGetter(self):
         self.getter = EpisodeGetter(self.user, self.password, self.type, self)
@@ -51,8 +51,11 @@ class EpisodesList(Plasma.ScrollWidget):
         error = self.getter.getError()        
         episodes = self.getter.getData()
         
+        if self.widget:
+            sip.delete(self.widget)
+            self.widget = None
+        
         self.widget = QGraphicsWidget(self)
-        #self.widget.setSizePolicy(QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding))
         
         self.wlayout = QGraphicsLinearLayout(Qt.Vertical, self.widget)
         self.wlayout.setSpacing(5)
@@ -68,7 +71,7 @@ class EpisodesList(Plasma.ScrollWidget):
                     size = size + ep.size().height()
                 self.setWidget(self.widget)
             else: 
-                self.showInfo('No episodes today.')
+                self.showInfo('No episodes.')
         elif error == EpisodeGetter.ERROR_CONNECTION:
             self.showInfo('Error getting episodes.')
         elif error == EpisodeGetter.ERROR_CREDENTIALS:
@@ -79,15 +82,20 @@ class EpisodesList(Plasma.ScrollWidget):
         sip.delete(self.getter)
         self.initGetter()
         
-        self.update()
+        #self.update()
                 
     def updateData(self):                
-        self.showInfo('Getting information from myepisodes.com.')
+        #self.showInfo('Getting information from myepisodes.com.')
+        if self.widget:
+            sip.delete(self.widget)
+        
+        self.widget = Plasma.BusyWidget(self)
+        self.setWidget(self.widget)
         self.getter.start()
         
     def showInfo(self, info):
         infoLabel = Plasma.Label(self)    
         infoLabel.setText('<center>'+info+'</center>')                
         self.setWidget(infoLabel)
-        self.update()        
+        #self.update()        
     

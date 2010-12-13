@@ -31,7 +31,8 @@ class EpisodeWidget(Plasma.Frame):
         self.episode = episode
         self.setFrameShadow(3)       
         self.setLayout(QGraphicsLinearLayout(Qt.Vertical, self))                
-        
+        self.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum))
+                
         #setting up series widget
         self.seriesWidget = QGraphicsWidget(self)
         self.seriesWidget.setLayout(QGraphicsLinearLayout(Qt.Horizontal, self.seriesWidget))
@@ -60,26 +61,22 @@ class EpisodeWidget(Plasma.Frame):
         
         self.searchEngines = searchEngines                            
         
-        self.setMinimumWidth(250)
-                
-        #self.setMinimumHeight(self.titleLabel.size().height() + self.seriesWidget.size().height())
-        #self.setMaximumHeight(self.titleLabel.size().height() + self.seriesWidget.size().height())
-        self.setSizePolicy(QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum))
-
-    def resizeEvent(self, ev):
-        Plasma.Frame.resizeEvent(self,ev)
-        print "top: " + str(self.seriesWidget.size().height())
-        print "down: " + str(self.titleLabel.size().height())
+        self.setMinimumWidth(250)                
                     
-    def contextMenuEvent(self,ev):        
+    def contextMenuEvent(self,ev):
+        print "Context Event!"        
+        print len(self.searchEngines)
         if not len(self.searchEngines):
             return
         
         menu = QMenu()
         for eng in self.searchEngines:
             eng.setEpisode(self.episode)
-            act = QAction(QString(eng.title), menu)
-            act.triggered.connect(eng.search)
-            menu.addAction(act)
+            menu.addAction(eng)
+            menu.triggered.connect(self.runSearch)
             
         menu.exec_(ev.screenPos())
+        
+    def runSearch(self, eng):
+        print "dupa"
+        eng.search()

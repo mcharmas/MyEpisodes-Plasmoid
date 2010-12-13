@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'settings_tab_sengines.ui'
+# Form implementation generated from reading ui file 'SettingsTabSEngines.ui'
 #
-# Created: Mon Dec 13 02:32:54 2010
+# Created: Mon Dec 13 19:22:58 2010
 #      by: PyQt4 UI code generator 4.8.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -52,7 +52,7 @@ class Ui_SettingsTabSEngines(object):
     def retranslateUi(self, SettingsTabSEngines):
         SettingsTabSEngines.setWindowTitle(QtGui.QApplication.translate("SettingsTabSEngines", "Search Engine Config", None, QtGui.QApplication.UnicodeUTF8))
         self.label.setText(QtGui.QApplication.translate("SettingsTabSEngines", "In URL defninition you can use:\n"
-"{show}, {title}, {series} and {episode} marks.", None, QtGui.QApplication.UnicodeUTF8))
+"{show}, {title}, {season} and {episode} marks.", None, QtGui.QApplication.UnicodeUTF8))
         self.newEngineButton.setText(QtGui.QApplication.translate("SettingsTabSEngines", "New Engine", None, QtGui.QApplication.UnicodeUTF8))
         self.saveButton.setText(QtGui.QApplication.translate("SettingsTabSEngines", "Save", None, QtGui.QApplication.UnicodeUTF8))
 

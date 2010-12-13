@@ -210,7 +210,7 @@ class HelloWorldApplet(plasmascript.Applet):
         gc.writeEntry('login', settings['login'])
         gc.writeEntry('password', settings['password'])        
         gc.writeEntry('engines', settings['engines'])
-
+        print len(settings['engines'])
         gc.writeEntry('showRefreshButton', settings['showRefreshButton'])
         gc.writeEntry('showLastUpdate', settings['showLastUpdate'])
         gc.writeEntry('enableTimer', settings['enableTimer'])

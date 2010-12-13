@@ -18,7 +18,7 @@
     <widget class="QLabel" name="label">
      <property name="text">
       <string>In URL defninition you can use:
-{show}, {title}, {series} and {episode} marks.</string>
+{show}, {title}, {season} and {episode} marks.</string>
      </property>
     </widget>
    </item>

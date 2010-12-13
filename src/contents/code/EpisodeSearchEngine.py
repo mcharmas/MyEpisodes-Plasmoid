@@ -21,10 +21,11 @@ Author: Michal Charmas
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from Episodes import *
-import webbrowser
 
-class EpisodeSearchEngine(QObject):
-    def __init__(self, title, cstr):
+class EpisodeSearchEngine(QAction):
+    def __init__(self, title, cstr, parent=None):
+        QAction.__init__(self, parent)
+        self.setText(title)
         self.title = title
         self.cstr = cstr
         self.showString = "{show}"
@@ -41,7 +42,8 @@ class EpisodeSearchEngine(QObject):
         nstr = nstr.replace(self.seasonString, self.episode.season)
         nstr = nstr.replace(self.episodeString, self.episode.episodeNr)
         
-        webbrowser.open_new(nstr)        
+        QDesktopServices.openUrl(QUrl(nstr))
+        #webbrowser.open_new(nstr)        
         
-    def setEpisode(self, ep):
+    def setEpisode(self, ep):                
         self.episode = ep 
