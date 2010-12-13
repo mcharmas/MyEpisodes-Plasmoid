@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'src/contents/ui/SettingsNewSEngineDialog.ui'
 #
-# Created: Mon Dec 13 19:30:15 2010
+# Created: Mon Dec 13 19:50:50 2010
 #      by: PyQt4 UI code generator 4.8.1
 #
 # WARNING! All changes made in this file will be lost!

@@ -24,8 +24,6 @@ from PyKDE4.plasma import Plasma
 from PyKDE4 import plasmascript
 from Config import *
 from EpisodeSearchEngine import *
-#from ConfigCredentials import *
-#from ConfigEngines import *
 from EpisodesList import *
 import PyKDE4
 import sip
@@ -66,25 +64,10 @@ class HelloWorldApplet(plasmascript.Applet):
     def initList(self):
         self.configComplete = self.readConfig()
         
-        print "DELETING"
-        print self.layout.count()
-        
         if self.centralWidget:
             self.layout.removeItem(self.centralWidget)
             sip.delete(self.centralWidget)
             self.centralWidget = None
-        
-#        for i in range(self.layout.count()):
-#            item = self.layout.itemAt(i)
-#            self.layout.removeAt(i)
-#            if item:            
-#                sip.delete(item)
-#        
-        #if self.tabs:
-        #    sip.delete(self.tabs)
-        
-        #if self.button:
-        #    sip.delete(self.button)
         
         if self.timer:
             sip.delete(self.timer)
@@ -114,7 +97,7 @@ class HelloWorldApplet(plasmascript.Applet):
   
             if self.settings['enableTimer']:
                 self.timer = QTimer(self)                
-                self.timer.setInterval(self.settings['timerInterval'] * 60000)
+                self.timer.setInterval(self.settings['timerInterval'] * 3600000)
                 self.timer.timeout.connect(el1.updateData)  
                 self.timer.timeout.connect(el2.updateData)
                 self.timer.timeout.connect(el3.updateData)

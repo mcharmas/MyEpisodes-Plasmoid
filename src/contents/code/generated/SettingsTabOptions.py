@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'src/contents/ui/SettingsTabOptions.ui'
 #
-# Created: Mon Dec 13 19:30:17 2010
+# Created: Mon Dec 13 19:50:52 2010
 #      by: PyQt4 UI code generator 4.8.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -61,5 +61,5 @@ class Ui_SettingsTabOptions(object):
         self.refreshButtonBox.setText(QtGui.QApplication.translate("SettingsTabOptions", "Show Refresh button", None, QtGui.QApplication.UnicodeUTF8))
         self.updateInfoBox.setText(QtGui.QApplication.translate("SettingsTabOptions", "Show last update info", None, QtGui.QApplication.UnicodeUTF8))
         self.automaticUpdatesBox.setText(QtGui.QApplication.translate("SettingsTabOptions", "Enable automatic updates", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setText(QtGui.QApplication.translate("SettingsTabOptions", "Update inteval (hour):", None, QtGui.QApplication.UnicodeUTF8))
+        self.label.setText(QtGui.QApplication.translate("SettingsTabOptions", "Update inteval (hours):", None, QtGui.QApplication.UnicodeUTF8))
 

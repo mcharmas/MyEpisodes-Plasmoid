@@ -47,7 +47,7 @@
          <item>
           <widget class="QLabel" name="label">
            <property name="text">
-            <string>Update inteval (hour):</string>
+            <string>Update inteval (hours):</string>
            </property>
           </widget>
          </item>
