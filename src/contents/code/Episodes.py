@@ -18,9 +18,9 @@ Author: Michal Charmas
     along with MyEpisodes Plasmoid.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from PyQt4 import QtCore
-from PyKDE4 import kio
+from PyQt4.QtCore import *
 from PyKDE4.kdecore import KUrl
+from PyKDE4.kio import *
 from hashlib import md5
 from httplib import HTTPConnection
 from xml.dom import minidom
@@ -41,17 +41,17 @@ class Episode:
         return self.show + " " + self.episode + " " + self.title + " " + self.date 
 
 
-class EpisodeGetter(QtCore.QObject):
+class EpisodeGetter(QObject):
     
     ERROR_NO = 0
     ERROR_CONNECTION = 1
     ERROR_CREDENTIALS = 2
     ERROR_PARSING = 3
     
-    completed = QtCore.pyqtSignal()
+    completed = pyqtSignal()
     
     def __init__(self, username, password, type, parent=None):
-        QtCore.QObject.__init__(self,parent)
+        QObject.__init__(self,parent)
         self.username = username
         self.password = md5(str(password))
         self.type = type
@@ -70,8 +70,8 @@ class EpisodeGetter(QtCore.QObject):
      
     def start(self):
         url = KUrl(self.url)
-        self.job = kio.KIO.storedGet(url, kio.KIO.Reload, kio.KIO.HideProgressInfo)
-        self.job.result.connect(self.resultData)
+        self.job = KIO.storedGet(url, KIO.Reload, KIO.HideProgressInfo)
+        self.connect(self.job, SIGNAL("result(KJob*)"), self.resultData)    
         
     def resultData(self, job):
         print self.type + ': Got data.'
